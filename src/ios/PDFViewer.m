@@ -6,7 +6,7 @@
 //  MIT Licensed
 
 #import "PDFViewer.h"
-#import <Cordova/CDV.h>
+#import <Cordova/CDVPlugin.h>
 
 @implementation PDFViewer
 
@@ -15,24 +15,23 @@
     NSString* url = [command.arguments objectAtIndex:0];
     NSString* fileTitle = [command.arguments objectAtIndex:1];
     if (url != nil && [url length] > 0) {
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            // NSURL *fileURL = [NSURL URLWithString:url];
-            //NSURL *fileURL = [NSURL fileURLWithPath:[url stringByReplacingOccurrencesOfString:@"file://" withString:@""]];
-            NSString *fileURL = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"www/%@",url];
-            if (fileURL) {
+            NSArray * dirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+
+            NSString * pdfFile = [[dirPath objectAtIndex:0] stringByAppendingPathComponent:[command argumentAtIndex:0]];
+            NSLog(@"pdfFile to show : %@", pdfFile);
+            if (pdfFile) {
                 pdfviewerViewController = [[UIStoryboard storyboardWithName:@"PDFViewerViewController" bundle:nil] instantiateViewControllerWithIdentifier:@"PDFViewer"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:pdfviewerViewController];
                 [pdfviewerViewController setPlugin:self];
                 [pdfviewerViewController setCommand:command];
-                [pdfviewerViewController setFileURL:fileURL];
+                [pdfviewerViewController setFileURL:pdfFile];
                 if (fileTitle != nil && [fileTitle length] > 0) {
                     [pdfviewerViewController setFileTitle:fileTitle];
                 }
-                if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]){
-                    [[self viewController] presentViewController:navigationController animated:YES  completion:nil];
-                } else {
-                    [[self viewController] presentModalViewController:navigationController animated:YES];
-                }
+                
+                [[self viewController] presentViewController:navigationController animated:YES completion:nil];
             }
         });
     } else {
