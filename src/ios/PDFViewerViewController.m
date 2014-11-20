@@ -12,6 +12,11 @@
 @end
 
 @implementation PDFViewerViewController
+//@synthesize webView;
+@synthesize fileURL;
+@synthesize fileTitle;
+@synthesize command;
+@synthesize plugin;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,22 +34,25 @@
     webView.delegate = self;
     webView.scrollView.delegate = self;
     
-    NSString *url = [fileURL relativeString];
+    //    NSString *url = [fileURL relativeString];
     if ([fileTitle length] > 0) {
         navItem.title = fileTitle;
     } else {
-        NSArray *parts = [url componentsSeparatedByString:@"/"];
+        NSArray *parts = [fileURL componentsSeparatedByString:@"/"];
         if ([parts count] > 1) {
             NSString *filename = [parts objectAtIndex:[parts count]-1];
             navItem.title = filename;
-
+            
         }
     }
+    //    navItem.title = @"Invoice";
     webView.backgroundColor = [UIColor darkGrayColor];
 	webView.scalesPageToFit = YES;
 	webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     webView.delegate = self;
-    [webView loadRequest:[NSURLRequest requestWithURL:fileURL]];
+    NSLog(@"fileURL : %@", fileURL);
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:fileURL]]];
+    //   [webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:@"/var/mobile/Applications/669E68F4-DB21-41AF-82AE-6FDF8D730CEF/Documents/invoice_ios.pdf"]]];
     
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     pinchGestureRecognizer.delegate = self;
@@ -150,26 +158,6 @@
     }
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
     [plugin.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void)setFileURL:(NSURL *)url
-{
-    fileURL = url;
-}
-
-- (void)setFileTitle:(NSString *)title
-{
-    fileTitle = title;
-}
-
-- (void)setPlugin:(CDVPlugin *)cdvPlugin
-{
-    plugin = cdvPlugin;
-}
-
-- (void)setCommand:(CDVInvokedUrlCommand *)cdvCommand
-{
-    command = cdvCommand;
 }
 
 - (void)didReceiveMemoryWarning
