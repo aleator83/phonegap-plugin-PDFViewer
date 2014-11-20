@@ -11,19 +11,16 @@
 @interface PDFViewerViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate> {
     BOOL isStatusBarHidden;
     CGPoint lastOffset;
-    NSURL *fileURL;
-    NSString *fileTitle;
-    CDVPlugin *plugin;
     CDVInvokedUrlCommand *command;
     IBOutlet UIWebView *webView;
     IBOutlet UIBarButtonItem *barButton;
     IBOutlet UINavigationItem *navItem;
 }
-
+@property (nonatomic,retain) NSString* fileURL;
+@property (nonatomic,retain) NSString* fileTitle;
+@property (nonatomic,retain) CDVInvokedUrlCommand *command;
+@property (nonatomic,retain) CDVPlugin *plugin;
 - (IBAction)close;
-- (void)setFileURL:(NSURL *)url;
-- (void)setFileTitle:(NSString *)title;
 - (void)setPlugin:(CDVPlugin *)cdvPlugin;
-- (void)setCommand:(CDVInvokedUrlCommand *)cdvCommand;
 
 @end
