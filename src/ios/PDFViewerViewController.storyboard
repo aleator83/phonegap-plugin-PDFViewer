@@ -50,7 +50,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="PDFViewer" id="O8g-uV-DqG">
-                        <barButtonItem key="leftBarButtonItem" title="Fermer" id="hGE-Ux-moW">
+                        <barButtonItem key="leftBarButtonItem" title="Schließen" id="hGE-Ux-moW">
                             <connections>
                                 <action selector="close" destination="jnK-AQ-8Gr" id="DXB-qZ-Qz7"/>
                             </connections>
